@@ -21,7 +21,9 @@ Vagrant.configure("2") do |config|
      cfg.vm.host_name = "m-k8s"
      cfg.vm.network "private_network", ip: "192.168.1.10"
      cfg.vm.network "forwarded_port", guest: 22, host: 60010, auto_correct: true, id: "ssh"
-     cfg.vm.synced_folder "../data", "/vagrant", disabled: true 
+     cfg.vm.synced_folder ".", "/vagrant"
+     
+     cfg.vm.provision "shell", inline: "ls -al"
 
      cfg.vm.provision "shell", path: "init.sh", args: ["MASTER"]
   end
@@ -42,7 +44,7 @@ Vagrant.configure("2") do |config|
       cfg.vm.host_name = "w#{i}-k8s"
       cfg.vm.network "private_network", ip: "192.168.1.10#{i}"
       cfg.vm.network "forwarded_port", guest: 22, host: "6010#{i}", auto_correct: true, id: "ssh"
-      cfg.vm.synced_folder "../data", "/vagrant", disabled: true
+      cfg.vm.synced_folder ".", "/vagrant"
       cfg.vm.provision "shell", path: "init.sh", args: ["WORKER"]
     end
   end
